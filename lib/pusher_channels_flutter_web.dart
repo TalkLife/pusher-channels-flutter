@@ -127,9 +127,13 @@ class PusherChannelsFlutterWeb {
     final Map<String, dynamic> msg = dartify<Map<String, dynamic>>(jsMessage);
     final String event = msg['event'] ?? '';
     final String channel = msg['channel'] ?? '';
-    final Map<String, dynamic> data = msg['data'] ?? {};
-    String? userId = data['user_id'];
-    final Map<String, dynamic>? userInfo = data['user_info'];
+    final dynamic data = msg['data'] ?? {};
+    String? userId;
+    Map<String, dynamic>? userInfo;
+    if (data is Map<String, dynamic>) {
+      userId = data['user_id'];
+      userInfo = data['user_info'];
+    }
 
     if (event == 'pusher_internal:subscription_error') {
       methodChannel!.invokeMethod(
